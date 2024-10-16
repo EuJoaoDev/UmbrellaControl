@@ -10,7 +10,9 @@ const Header: React.FC<HeaderProps> = ({ userName, userProfileImage }) => {
   return (
     <View style={styles.headerContainer}>
       <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
-      <Text style={styles.userName}>{userName}</Text>
+      <View style={styles.userNameContainer}>
+        <Text style={styles.userName}>{userName}</Text>
+      </View>
     </View>
   );
 };
@@ -18,23 +20,31 @@ const Header: React.FC<HeaderProps> = ({ userName, userProfileImage }) => {
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: '#2C8C8C',
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
     elevation: 5,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
   },
   profileImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  userNameContainer: {
+    flex: 1, // Ocupar espaço restante para centralizar o texto
+    alignItems: 'center', // Centraliza horizontalmente
   },
   userName: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center', // Centraliza o texto
   },
 });
 

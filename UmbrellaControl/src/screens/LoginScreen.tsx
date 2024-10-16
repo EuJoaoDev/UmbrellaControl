@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, Alert, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-paper';
-import LottieView from 'lottie-react-native'; // Importe o LottieView
+import LottieView from 'lottie-react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Importe o ícone
 
 type RootStackParamList = {
   Home: undefined;
@@ -16,6 +17,7 @@ type LoginScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const LoginScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [userType, setUserType] = useState<string>(''); // Estado para tipo de usuário
   const navigation = useNavigation<LoginScreenProp>();
 
   useEffect(() => {
@@ -32,13 +34,13 @@ const LoginScreen = () => {
   }, []);
 
   const handleLogin = async () => {
-    if (email === '' || password === '') {
+    if (email === '' || password === '' || userType === '') { // Adicione a verificação do tipo de usuário
       Alert.alert('Erro', 'Preencha todos os campos.');
       return;
     }
 
     try {
-      const response = await fetch('https://seu-endpoint.com/sessions', {
+      const response = await fetch('http://192.168.0.10:3000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,6 +48,7 @@ const LoginScreen = () => {
         body: JSON.stringify({
           email,
           password,
+          userType, // Inclua o tipo de usuário na requisição
         }),
       });
 
@@ -69,13 +72,25 @@ const LoginScreen = () => {
     <View style={styles.container}>
       {/* Animação Lottie */}
       <LottieView
-        source={require('../../assets/Animation - 1729039184843.json')} // Caminho para o arquivo da animação
+        source={require('../../assets/Animation - 1729039184843.json')}
         autoPlay
         loop
         style={styles.lottie}
       />
 
-      <Text style={styles.title}>Guarda-Chuva Farmácias </Text>
+      <Text style={styles.title}>Guarda-Chuva Farmácias</Text>
+
+      <View style={styles.inputContainer}>
+        <Icon name="person" size={20} color="#A9A9A9" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Tipo de Usuário"
+          value={userType}
+          onChangeText={setUserType}
+          placeholderTextColor="#A9A9A9"
+        />
+      </View>
+
       <TextInput
         style={styles.input}
         placeholder="E-mail"
@@ -113,16 +128,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   lottie: {
-    width: 350, // Defina o tamanho apropriado
-    height: 350, // Defina o tamanho apropriado
+    width: 350,
+    height: 350,
     alignSelf: 'center',
-    marginBottom: 40, // Espaço abaixo da animação
+    marginBottom: 40,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#2C8C8C',
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
   },
   input: {
@@ -132,11 +152,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontSize: 16,
     color: '#000',
-    marginBottom: 20,
+    flex: 1,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     elevation: 5,
+  },
+  icon: {
+    position: 'absolute',
+    left: 20,
   },
   button: {
     backgroundColor: '#2C8C8C',
