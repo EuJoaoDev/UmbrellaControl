@@ -4,14 +4,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/screens/LoginScreen';  // Importando a tela de Login
 import HomeScreen from './src/screens/HomeScreen';    // Importando a tela de Home
 import UserListScreen from './src/screens/UserListScreen';  // Importando a tela de Listagem de Usuários
-import UserRegisterScreen from './src/screens/UserRegisterScreen';  // Importando a tela de Cadastro de Usuário
+import UserRegisterScreen from './src/screens/UserRegisterScreen';
+import ProductListScreen from './src/screens/ProductListScreen';  // Importando a tela de Listagem de Produtos
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="UserList">
+      <Stack.Navigator initialRouteName="ProductList">
         {/* Tela de Login */}
         <Stack.Screen
           name="Login"
@@ -38,6 +39,13 @@ const App = () => {
           name="UserRegister"
           component={UserRegisterScreen}
           options={{ title: 'Criar Usuário' }}
+        />
+        
+        {/* Tela de Listagem de Produtos */}
+        <Stack.Screen
+          name="ProductList"
+          component={ProductListScreen}
+          options={{ title: 'Listagem de Produtos' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
