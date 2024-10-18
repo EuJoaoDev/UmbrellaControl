@@ -9,7 +9,7 @@ const MovementListScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchMovements = async () => {
       try {
-        const response = await axios.get('/movement');
+        const response = await axios.get('http://192.168.0.10:3000/movement');
         setMovements(response.data);
       } catch (error) {
         alert('Erro ao carregar as movimentações.');
@@ -41,7 +41,7 @@ const MovementListScreen = ({ navigation }) => {
       {/* Botão para adicionar nova movimentação */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('MovementRegister')}
+        onPress={() => navigation.navigate('Movement')}
       >
         <Text style={styles.addButtonText}>Adicionar Nova Movimentação</Text>
       </TouchableOpacity>

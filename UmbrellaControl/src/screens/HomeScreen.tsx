@@ -36,7 +36,7 @@ const HomeScreen = () => {
         {/* Botão de Listagem de Produtos */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Products')}
+          onPress={() => navigation.navigate('ProductList')}
         >
           <Icon name="list" size={24} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>Listagem de Produtos</Text>
@@ -45,7 +45,7 @@ const HomeScreen = () => {
         {/* Botão de Gerenciamento de Usuários */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Users')}
+          onPress={() => navigation.navigate('UserList')}
         >
           <Icon name="group" size={24} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>Gerenciar Usuários</Text>

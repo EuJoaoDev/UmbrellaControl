@@ -7,13 +7,14 @@ import UserListScreen from './src/screens/UserListScreen';  // Importando a tela
 import UserRegisterScreen from './src/screens/UserRegisterScreen';
 import ProductListScreen from './src/screens/ProductListScreen';  // Importando a tela de Listagem de Produtos
 import MovementListScreen from './src/screens/MovementListScreen';  // Importando a tela de Listagem de Movimentações
+import MovementScreen from './src/screens/MovementScreen';  // Importando a tela de Cadastro de Movimentação
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="MovementList">
         {/* Tela de Login */}
         <Stack.Screen
           name="Login"
@@ -48,11 +49,19 @@ const App = () => {
           component={ProductListScreen}
           options={{ title: 'Listagem de Produtos' }}
         />
-        {/* Tela de listagem de movimentações */}
+
+        {/* Tela de Listagem de Movimentações */}
         <Stack.Screen
           name="MovementList"
           component={MovementListScreen}
           options={{ title: 'Movimentações' }}
+        />
+
+        {/* Tela de Cadastro de Movimentação */}
+        <Stack.Screen
+          name="Movement"
+          component={MovementScreen}
+          options={{ title: 'Cadastrar Movimentação' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -60,4 +69,3 @@ const App = () => {
 };
 
 export default App;
-
