@@ -11,11 +11,12 @@ const ProductListScreen = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products');
+        const response = await axios.get('http://192.168.0.10:3000/products'); // Altere a URL conforme necessário
+        console.log(response.data); // Log para verificar a estrutura da resposta
         setProducts(response.data);
-        setFilteredProducts(response.data); // Iniciar com todos os produtos
+        setFilteredProducts(response.data); // Inicia com todos os produtos
       } catch (error) {
-        alert('Erro ao carregar os produtos.');
+        alert('Erro ao carregar os produtos: ' + error.message);
       }
     };
 
@@ -25,18 +26,23 @@ const ProductListScreen = () => {
   // Função para filtrar produtos com base no termo de pesquisa
   const handleSearch = () => {
     const filtered = products.filter(product =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.store.toLowerCase().includes(searchTerm.toLowerCase())
+      product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.branch_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
   };
 
+  // Componente para renderizar cada produto
   const renderProduct = ({ item }) => (
     <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.productImage} />
+      {item.image_url ? (
+        <Image source={{ uri: item.image_url }} style={styles.productImage} />
+      ) : (
+        <View style={styles.placeholderImage} />
+      )}
       <View style={styles.productInfo}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.storeName}>Loja {item.store}</Text>
+        <Text style={styles.productName}>{item.product_name}</Text>
+        <Text style={styles.storeName}>Loja: {item.branch_name}</Text>
         <Text style={styles.quantity}>{item.quantity} Unidades</Text>
         <Text style={styles.description}>
           {item.description.length > 60
@@ -64,16 +70,21 @@ const ProductListScreen = () => {
       <Text style={styles.productCount}>{filteredProducts.length} produtos encontrados</Text>
 
       {/* FlatList para exibir os produtos */}
-      <FlatList
-        data={filteredProducts}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderProduct}
-        contentContainerStyle={styles.list}
-      />
+      {filteredProducts.length > 0 ? (
+        <FlatList
+          data={filteredProducts}
+          keyExtractor={(item) => item.product_name} // Use product_name como chave
+          renderItem={renderProduct}
+          contentContainerStyle={styles.list}
+        />
+      ) : (
+        <Text style={styles.productCount}>Nenhum produto encontrado</Text>
+      )}
     </View>
   );
 };
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -120,9 +131,16 @@ const styles = StyleSheet.create({
     borderColor: '#00796b',
   },
   productImage: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     borderRadius: 8,
+    marginRight: 15,
+  },
+  placeholderImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    backgroundColor: '#ccc', // Cor de fundo para imagem não disponível
     marginRight: 15,
   },
   productInfo: {

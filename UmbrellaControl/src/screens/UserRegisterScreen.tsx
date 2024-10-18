@@ -35,7 +35,7 @@ const UserRegisterScreen = () => {
 
     try {
       // Enviando a requisição POST
-      const response = await axios.post('https://api.exemplo.com/users', userData);
+      const response = await axios.post('http://192.168.0.10:3000/users', userData);
       
       // Tratamento de sucesso
       Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');

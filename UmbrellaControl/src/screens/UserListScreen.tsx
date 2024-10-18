@@ -17,14 +17,14 @@ const UserListScreen = () => {
 
   // Função para carregar os usuários quando a tela for aberta
   useEffect(() => {
-    axios.get('/users')
+    axios.get('http://192.168.0.10:3000/users')
       .then(response => setUsers(response.data))
       .catch(error => console.error(error));
   }, []);
 
   // Função para alterar o status do usuário
   const toggleStatus = (id: number, currentStatus: boolean) => {
-    axios.put(`/users/${id}/status`, { status: !currentStatus })
+    axios.patch(`http://192.168.0.10:3000/users/${id}/status`, { status: !currentStatus })
       .then(() => {
         setUsers(prevUsers => 
           prevUsers.map(user => 
