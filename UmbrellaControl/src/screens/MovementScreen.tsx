@@ -39,13 +39,9 @@ const MovementScreen = () => {
         if (!response.ok) {
           throw new Error(`Erro: ${response.status}`);
         }
-        const contentType = response.headers.get('Content-Type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          setBranches(data);
-        } else {
-          throw new Error('Resposta não é JSON');
-        }
+        const data = await response.json();
+        console.log("Branches recebidas:", data); // Verifique a estrutura dos dados
+        setBranches(data);
       } catch (error) {
         console.error('Erro ao buscar filiais:', error);
         Alert.alert('Erro', 'Erro ao buscar filiais. Tente novamente mais tarde.');
@@ -58,13 +54,9 @@ const MovementScreen = () => {
         if (!response.ok) {
           throw new Error(`Erro: ${response.status}`);
         }
-        const contentType = response.headers.get('Content-Type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          setProducts(data);
-        } else {
-          throw new Error('Resposta não é JSON');
-        }
+        const data = await response.json();
+        console.log("Produtos recebidos:", data); // Verifique a estrutura dos dados
+        setProducts(data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
         Alert.alert('Erro', 'Erro ao buscar produtos. Tente novamente mais tarde.');
@@ -76,6 +68,12 @@ const MovementScreen = () => {
   }, []);
 
   const handleRegister = async () => {
+    // Validações
+    if (!originBranch || !destinationBranch || !selectedProduct) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
     if (originBranch === destinationBranch) {
       Alert.alert('Erro', 'As filiais de origem e destino devem ser diferentes.');
       return;
@@ -95,7 +93,7 @@ const MovementScreen = () => {
     };
 
     try {
-      const response = await fetch('http://192.168.0.10:3000/moviment', {
+      const response = await fetch('http://192.168.0.10:3000/movements', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,6 +103,12 @@ const MovementScreen = () => {
 
       if (response.ok) {
         Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso!');
+        // Limpar campos após sucesso
+        setOriginBranch(null);
+        setDestinationBranch(null);
+        setSelectedProduct(null);
+        setQuantity(null);
+        setObservations('');
         navigation.navigate('Home');
       } else {
         Alert.alert('Erro', 'Falha ao cadastrar a movimentação.');
@@ -124,6 +128,7 @@ const MovementScreen = () => {
         onValueChange={(itemValue) => setOriginBranch(itemValue)}
         style={styles.picker}
       >
+        <Picker.Item label="Selecione uma filial" value={null} />
         {branches.map((branch) => (
           <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
         ))}
@@ -136,6 +141,7 @@ const MovementScreen = () => {
         onValueChange={(itemValue) => setDestinationBranch(itemValue)}
         style={styles.picker}
       >
+        <Picker.Item label="Selecione uma filial" value={null} />
         {branches.map((branch) => (
           <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
         ))}
@@ -148,10 +154,15 @@ const MovementScreen = () => {
         onValueChange={(itemValue) => {
           setSelectedProduct(itemValue);
           const product = products.find((p) => p.id === itemValue);
-          if (product) setAvailableQuantity(product.availableQuantity);
+          if (product) {
+            setAvailableQuantity(product.availableQuantity);
+          } else {
+            setAvailableQuantity(0);
+          }
         }}
         style={styles.picker}
       >
+        <Picker.Item label="Selecione um produto" value={null} />
         {products.map((product) => (
           <Picker.Item key={product.id} label={product.name} value={product.id} />
         ))}
@@ -177,7 +188,7 @@ const MovementScreen = () => {
 
       {/* Botão para cadastrar */}
       <View style={styles.buttonContainer}>
-        <Button title="Cadastrar" onPress={handleRegister} color="#2C8C8C" />
+        <Button title="Cadastrar" onPress={handleRegister} color="#5a8d8d" />
       </View>
     </View>
   );

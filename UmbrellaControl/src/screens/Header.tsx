@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Certifique-se de que esta biblioteca está instalada
 
 interface HeaderProps {
   userName: string;
-  userProfileImage?: string; // Se não for necessário, pode ser removido
+  onLogout: () => void; // Função de logout
 }
 
-const Header: React.FC<HeaderProps> = ({ userName }) => {
+const Header: React.FC<HeaderProps> = ({ userName, onLogout }) => {
   return (
     <View style={styles.headerContainer}>
       <Icon name="person" size={40} color="#fff" style={styles.profileIcon} />
@@ -15,6 +15,9 @@ const Header: React.FC<HeaderProps> = ({ userName }) => {
         <Text style={styles.greeting}>Olá,</Text>
         <Text style={styles.userName}>{userName}</Text>
       </View>
+      <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
+        <Icon name="logout" size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
   },
   userNameContainer: {
     flex: 1,
-    alignItems: 'flex-start', // Alinha o texto à esquerda
+    alignItems: 'flex-start',
   },
   greeting: {
     fontSize: 18,
@@ -48,6 +51,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#fff',
     fontWeight: 'bold',
+  },
+  logoutButton: {
+    marginLeft: 10,
   },
 });
 

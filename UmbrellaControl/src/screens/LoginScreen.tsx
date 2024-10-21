@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Importe o ícone
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type RootStackParamList = {
   Home: undefined;
@@ -17,7 +17,6 @@ type LoginScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
 const LoginScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [userType, setUserType] = useState<string>(''); // Estado para tipo de usuário
   const navigation = useNavigation<LoginScreenProp>();
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const LoginScreen = () => {
   }, []);
 
   const handleLogin = async () => {
-    if (email === '' || password === '' || userType === '') { // Adicione a verificação do tipo de usuário
+    if (email === '' || password === '') {
       Alert.alert('Erro', 'Preencha todos os campos.');
       return;
     }
@@ -48,7 +47,6 @@ const LoginScreen = () => {
         body: JSON.stringify({
           email,
           password,
-          userType, // Inclua o tipo de usuário na requisição
         }),
       });
 
@@ -70,7 +68,6 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Animação Lottie */}
       <LottieView
         source={require('../../assets/Animation - 1729039184843.json')}
         autoPlay
@@ -79,17 +76,6 @@ const LoginScreen = () => {
       />
 
       <Text style={styles.title}>Guarda-Chuva Farmácias</Text>
-
-      <View style={styles.inputContainer}>
-        <Icon name="person" size={20} color="#A9A9A9" style={styles.icon} />
-        <TextInput
-          style={styles.input}
-          placeholder="Tipo de Usuário"
-          value={userType}
-          onChangeText={setUserType}
-          placeholderTextColor="#A9A9A9"
-        />
-      </View>
 
       <TextInput
         style={styles.input}
@@ -128,8 +114,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   lottie: {
-    width: 350,
-    height: 350,
+    width: 220,
+    height: 220,
     alignSelf: 'center',
     marginBottom: 40,
   },
@@ -140,27 +126,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
   input: {
     height: 50,
     backgroundColor: '#fff',
-    borderRadius: 15,
+    borderRadius: 10,
     paddingHorizontal: 15,
     fontSize: 16,
     color: '#000',
-    flex: 1,
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     elevation: 5,
-  },
-  icon: {
-    position: 'absolute',
-    left: 20,
   },
   button: {
     backgroundColor: '#2C8C8C',

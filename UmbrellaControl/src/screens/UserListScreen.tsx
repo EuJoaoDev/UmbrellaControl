@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Para os ícones
-import axios from 'axios'; // Para requisições GET e PUT
+import axios from 'axios'; // Para requisições GET e PATCH
 
 type User = {
   id: number;
@@ -19,12 +19,12 @@ const UserListScreen = () => {
   useEffect(() => {
     axios.get('http://192.168.0.10:3000/users')
       .then(response => setUsers(response.data))
-      .catch(error => console.error(error));
+      .catch(error => console.error('Erro ao buscar usuários:', error));
   }, []);
 
   // Função para alterar o status do usuário
   const toggleStatus = (id: number, currentStatus: boolean) => {
-    axios.patch(`http://192.168.0.10:3000/users/${id}/status`, { status: !currentStatus })
+    axios.patch(`http://192.168.0.10:3000/users/${id}/toggle-status`, { status: !currentStatus })
       .then(() => {
         setUsers(prevUsers => 
           prevUsers.map(user => 
@@ -32,7 +32,7 @@ const UserListScreen = () => {
           )
         );
       })
-      .catch(error => console.error(error));
+      .catch(error => console.error('Erro ao atualizar status:', error));
   };
 
   // Renderizar cada item (usuário) da lista
@@ -40,11 +40,11 @@ const UserListScreen = () => {
     return (
       <View style={[styles.card, item.status ? styles.activeUser : styles.inactiveUser]}>
         <View style={styles.userInfo}>
+          {/* Ícone e texto em views separadas para garantir separação */}
           <Icon name={item.type === 'Motoboy' ? 'motorcycle' : 'store'} size={24} color="#555" />
           <Text style={styles.userName}>{item.name}</Text>
         </View>
         <View style={styles.userDetails}>
-          <Text style={styles.userType}>Loja 10 - Buriti</Text> {/* Exemplo de loja */}
           <Switch
             value={item.status}
             onValueChange={() => toggleStatus(item.id, item.status)}
@@ -70,7 +70,7 @@ const UserListScreen = () => {
 
       <FlatList
         data={users}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}  // Garantir que o ID seja uma string
         renderItem={renderItem}
         contentContainerStyle={styles.list}
       />
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   addButton: {
-    backgroundColor: '#7A52C7', // Mesma cor do botão de login/tela inicial
+    backgroundColor: '#2C8C8C', // Mesma cor do botão de login/tela inicial
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   activeUser: {
     backgroundColor: '#D9EAD3',
-    borderColor: '#4CAF50',
+    borderColor: '#2C8C8C',
     borderWidth: 2,
   },
   inactiveUser: {
@@ -140,10 +140,6 @@ const styles = StyleSheet.create({
   userDetails: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  userType: {
-    marginRight: 10,
-    color: '#555',
   },
 });
 

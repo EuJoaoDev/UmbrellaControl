@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -28,9 +28,17 @@ const HomeScreen = () => {
     loadUserData();
   }, []);
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('user'); // Remove o usuário do AsyncStorage
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }], // Redireciona para a tela de login
+    });
+  };
+
   return (
     <View style={styles.container}>
-      {user && <Header userName={user.name} userProfileImage={user.profile} />}
+      {user && <Header userName={user.name} onLogout={handleLogout} />}
 
       <View style={styles.buttonsContainer}>
         {/* Botão de Listagem de Produtos */}
@@ -50,6 +58,15 @@ const HomeScreen = () => {
           <Icon name="group" size={24} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>Gerenciar Usuários</Text>
         </TouchableOpacity>
+
+        {/* Botão de Lista de Movimentações */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('MovementList')}
+        >
+          <Icon name="import-export" size={24} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Lista de Movimentações</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -68,9 +85,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     paddingVertical: 15,
     backgroundColor: '#2C8C8C',
