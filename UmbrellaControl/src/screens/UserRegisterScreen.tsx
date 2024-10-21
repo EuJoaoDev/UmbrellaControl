@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import axios from 'axios'; // Importando Axios
+import axios from 'axios'; 
 
 const UserRegisterScreen = () => {
   const [profile, setProfile] = useState('motorista'); // Estado para controlar o tipo de perfil
@@ -28,14 +28,14 @@ const UserRegisterScreen = () => {
       profile,
       name,
       document,
-      fullAddress: address,
+      full_address: address, // Corrigido para "full_address"
       email,
       password,
     };
 
     try {
-      // Enviando a requisição POST
-      const response = await axios.post('http://192.168.0.10:3000/users', userData);
+      // Enviando a requisição POST para o endpoint correto
+      const response = await axios.post('http://192.168.0.10:3000/register', userData);
       
       // Tratamento de sucesso
       Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   selected: {
-    backgroundColor: '#4CAF50', // Cor similar à tela de login/home
-    borderColor: '#4CAF50',
+    backgroundColor: '#2C8C8C', // Cor similar à tela de login/home
+    borderColor: '#2C8C8C',
   },
   input: {
     borderWidth: 1,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#6200ee', // Cor do botão
+    backgroundColor: '#2C8C8C', // Cor do botão
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

@@ -11,7 +11,7 @@ const ProductListScreen = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://192.168.0.10:3000/products'); // Altere a URL conforme necessário
+        const response = await axios.get('http://192.168.0.10:3000/products');
         console.log(response.data); // Log para verificar a estrutura da resposta
         setProducts(response.data);
         setFilteredProducts(response.data); // Inicia com todos os produtos
@@ -26,8 +26,8 @@ const ProductListScreen = () => {
   // Função para filtrar produtos com base no termo de pesquisa
   const handleSearch = () => {
     const filtered = products.filter(product =>
-      product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.branch_name.toLowerCase().includes(searchTerm.toLowerCase())
+      (product.product_name && product.product_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (product.branch_name && product.branch_name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
     setFilteredProducts(filtered);
   };
@@ -41,13 +41,11 @@ const ProductListScreen = () => {
         <View style={styles.placeholderImage} />
       )}
       <View style={styles.productInfo}>
-        <Text style={styles.productName}>{item.product_name}</Text>
-        <Text style={styles.storeName}>Loja: {item.branch_name}</Text>
-        <Text style={styles.quantity}>{item.quantity} Unidades</Text>
+        <Text style={styles.productName}>{item.product_name || 'Nome não disponível'}</Text>
+        <Text style={styles.storeName}>Loja: {item.branch_name || 'Nome não disponível'}</Text>
+        <Text style={styles.quantity}>{item.quantity || 0} Unidades</Text>
         <Text style={styles.description}>
-          {item.description.length > 60
-            ? `${item.description.substring(0, 60)}...`
-            : item.description}
+          {item.description ? (item.description.length > 60 ? `${item.description.substring(0, 60)}...` : item.description) : 'Descrição não disponível'}
         </Text>
       </View>
     </View>
@@ -73,7 +71,7 @@ const ProductListScreen = () => {
       {filteredProducts.length > 0 ? (
         <FlatList
           data={filteredProducts}
-          keyExtractor={(item) => item.product_name} // Use product_name como chave
+          keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()} // Use um id ou um valor gerado aleatoriamente
           renderItem={renderProduct}
           contentContainerStyle={styles.list}
         />
