@@ -40,7 +40,6 @@ const MovementScreen = () => {
           throw new Error(`Erro: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Branches recebidas:", data); // Verifique a estrutura dos dados
         setBranches(data);
       } catch (error) {
         console.error('Erro ao buscar filiais:', error);
@@ -55,7 +54,6 @@ const MovementScreen = () => {
           throw new Error(`Erro: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Produtos recebidos:", data); // Verifique a estrutura dos dados
         setProducts(data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
@@ -85,9 +83,9 @@ const MovementScreen = () => {
     }
 
     const movementData = {
-      originBranch,
-      destinationBranch,
-      product: selectedProduct,
+      originBranchId: originBranch,  
+      destinationBranchId: destinationBranch,
+      productId: selectedProduct,
       quantity,
       observations,
     };
@@ -111,7 +109,8 @@ const MovementScreen = () => {
         setObservations('');
         navigation.navigate('Home');
       } else {
-        Alert.alert('Erro', 'Falha ao cadastrar a movimentação.');
+        const errorData = await response.json();
+        Alert.alert('Erro', errorData.message || 'Falha ao cadastrar a movimentação.');
       }
     } catch (error) {
       console.error('Erro ao cadastrar movimentação:', error);
@@ -154,17 +153,13 @@ const MovementScreen = () => {
         onValueChange={(itemValue) => {
           setSelectedProduct(itemValue);
           const product = products.find((p) => p.id === itemValue);
-          if (product) {
-            setAvailableQuantity(product.availableQuantity);
-          } else {
-            setAvailableQuantity(0);
-          }
+          setAvailableQuantity(product ? product.availableQuantity : 0);
         }}
         style={styles.picker}
       >
         <Picker.Item label="Selecione um produto" value={null} />
         {products.map((product) => (
-          <Picker.Item key={product.id} label={product.name} value={product.id} />
+          <Picker.Item key={product.id} label={product.product_name} value={product.id} />
         ))}
       </Picker>
 
