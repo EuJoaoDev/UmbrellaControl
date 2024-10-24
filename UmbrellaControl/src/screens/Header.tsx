@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Certifique-se de que esta biblioteca está instalada
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface HeaderProps {
   userName: string;
-  onLogout: () => void; // Função de logout
+  onLogout: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ userName, onLogout }) => {

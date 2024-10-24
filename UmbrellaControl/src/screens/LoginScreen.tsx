@@ -6,6 +6,7 @@ import LottieView from 'lottie-react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios'; // Importação do axios
 
 type RootStackParamList = {
   Home: undefined;
@@ -22,11 +23,24 @@ const LoginScreen = () => {
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       const user = await AsyncStorage.getItem('user');
-      if (user) {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
+
+        if (user) {
+            const userProfile = user.profile
+
+            let route = ''
+    
+            if( userProfile == 'admin'){
+                route = 'Home'
+            } else if (userProfile == 'filial'){
+                route = 'MovementList' // bote o nome da tela aqui
+            } else {
+                route = 'ProductList' // bote o nome da tela aqui
+            }
+    
+            navigation.reset({
+              index: 0,
+              routes: [{ name: route }],
+            });
       }
     };
     checkUserLoggedIn();
@@ -39,24 +53,31 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await fetch('http://192.168.0.10:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const response = await axios.post('http://192.168.0.10:3000/login', {
+        email,
+        password,
       });
 
-      const data = await response.json();
+      const data = response.data; // Captura a resposta dos dados
 
-      if (response.ok) {
+      if (response.status === 200) {
         await AsyncStorage.setItem('user', JSON.stringify(data));
+
+        const userProfile = data.profile
+
+        let route = ''
+
+        if( userProfile == 'admin'){
+            route = 'Home'
+        } else if (userProfile == 'filial'){
+            route = 'MovementList' // bote o nome da tela aqui
+        } else {
+            route = 'ProductList' // bote o nome da tela aqui
+        }
+
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Home' }],
+          routes: [{ name: route }],
         });
       } else {
         Alert.alert('Erro', 'Credenciais inválidas.');
