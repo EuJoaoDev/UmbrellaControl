@@ -14,7 +14,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MovementScreen">
+      <Stack.Navigator initialRouteName="Login">
         {/* Tela de Login */}
         <Stack.Screen
           name="Login"

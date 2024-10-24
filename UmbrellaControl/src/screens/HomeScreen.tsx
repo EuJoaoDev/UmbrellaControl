@@ -59,14 +59,7 @@ const HomeScreen = () => {
           <Text style={styles.buttonText}>Gerenciar Usuários</Text>
         </TouchableOpacity>
 
-        {/* Botão de Lista de Movimentações */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('MovementList')}
-        >
-          <Icon name="import-export" size={24} color="#fff" style={styles.icon} />
-          <Text style={styles.buttonText}>Lista de Movimentações</Text>
-        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -78,6 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F5F5',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 80, // Adicionei um paddingTop para acomodar o Header
   },
   buttonsContainer: {
     marginTop: 40,

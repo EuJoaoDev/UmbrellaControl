@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Switch, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { 
+  View, FlatList, Text, StyleSheet, Switch, TouchableOpacity, 
+  ActivityIndicator, Alert, LayoutAnimation, UIManager, Platform 
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Para os ícones
-import axios from 'axios'; // Para requisições GET e PATCH
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
 
 type User = {
   id: number;
   name: string;
   type: string;
-  status: boolean; // Ativo ou desativado
+  status: boolean;
 };
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const UserListScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true); // Indicador de carregamento
-  const [togglingStatus, setTogglingStatus] = useState<number | null>(null); // Controla o usuário que está sendo atualizado
+  const [loading, setLoading] = useState(true);
+  const [togglingStatus, setTogglingStatus] = useState<number | null>(null);
   const navigation = useNavigation();
 
-  // Função para carregar os usuários quando a tela for aberta
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -33,24 +39,24 @@ const UserListScreen = () => {
     }
   };
 
-  // Função para alterar o status do usuário
   const toggleStatus = async (id: number, currentStatus: boolean) => {
-    setTogglingStatus(id); // Define qual usuário está sendo atualizado
+    setTogglingStatus(id);
     try {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       await axios.patch(`http://192.168.0.10:3000/users/${id}/toggle-status`, { status: !currentStatus });
       setUsers(prevUsers => 
         prevUsers.map(user => 
           user.id === id ? { ...user, status: !user.status } : user
         )
       );
+      Alert.alert('Sucesso', 'Status do usuário alterado com sucesso!');
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível alterar o status do usuário.');
     } finally {
-      setTogglingStatus(null); // Limpa o status de atualização
+      setTogglingStatus(null);
     }
   };
 
-  // Renderizar cada item (usuário) da lista
   const renderItem = ({ item }: { item: User }) => (
     <View style={[styles.card, item.status ? styles.activeUser : styles.inactiveUser]}>
       <View style={styles.userInfo}>
@@ -61,8 +67,9 @@ const UserListScreen = () => {
         <Switch
           value={item.status}
           onValueChange={() => toggleStatus(item.id, item.status)}
-          disabled={togglingStatus === item.id} // Desabilita o switch enquanto atualiza o status
+          disabled={togglingStatus === item.id}
         />
+        {togglingStatus === item.id && <ActivityIndicator size="small" color="#0000ff" />}
       </View>
     </View>
   );
@@ -95,8 +102,8 @@ const UserListScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
-        numColumns={2}  // Definir o número de colunas
-        columnWrapperStyle={styles.row}  // Garante que as colunas fiquem espaçadas corretamente
+        numColumns={2}
+        columnWrapperStyle={styles.row}
       />
     </View>
   );

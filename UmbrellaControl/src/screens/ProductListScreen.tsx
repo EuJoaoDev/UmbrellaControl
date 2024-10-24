@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from './Header';
 
-const ProductListScreen = () => {
+const ProductListScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const userName = 'Usuário'; // Altere conforme necessário
 
-  // Função para carregar os produtos da API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://192.168.0.10:3000/products');
-        console.log(response.data); // Log para verificar a estrutura da resposta
         setProducts(response.data);
-        setFilteredProducts(response.data); // Inicia com todos os produtos
+        setFilteredProducts(response.data);
       } catch (error) {
         alert('Erro ao carregar os produtos: ' + error.message);
       }
@@ -23,7 +24,6 @@ const ProductListScreen = () => {
     fetchProducts();
   }, []);
 
-  // Função para filtrar produtos com base no termo de pesquisa
   const handleSearch = () => {
     const filtered = products.filter(product =>
       (product.product_name && product.product_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -32,7 +32,11 @@ const ProductListScreen = () => {
     setFilteredProducts(filtered);
   };
 
-  // Componente para renderizar cada produto
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('user');
+    navigation.navigate('Login');
+  };
+
   const renderProduct = ({ item }) => (
     <View style={styles.card}>
       {item.image_url ? (
@@ -53,7 +57,8 @@ const ProductListScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Campo de pesquisa */}
+      <Header userName={userName} onLogout={handleLogout} />
+
       <TextInput
         style={styles.searchInput}
         placeholder="Digite o nome do produto ou loja"
@@ -64,14 +69,12 @@ const ProductListScreen = () => {
         <Text style={styles.searchButtonText}>Buscar</Text>
       </TouchableOpacity>
 
-      {/* Exibição da quantidade de produtos encontrados */}
       <Text style={styles.productCount}>{filteredProducts.length} produtos encontrados</Text>
 
-      {/* FlatList para exibir os produtos */}
       {filteredProducts.length > 0 ? (
         <FlatList
           data={filteredProducts}
-          keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()} // Use um id ou um valor gerado aleatoriamente
+          keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
           renderItem={renderProduct}
           contentContainerStyle={styles.list}
         />
@@ -82,12 +85,12 @@ const ProductListScreen = () => {
   );
 };
 
-// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
     padding: 20,
+    paddingTop: 90, // Ajuste para o espaço do Header
   },
   searchInput: {
     height: 50,
@@ -138,7 +141,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
-    backgroundColor: '#ccc', // Cor de fundo para imagem não disponível
+    backgroundColor: '#ccc',
     marginRight: 15,
   },
   productInfo: {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import Header from './Header'; // Verifique se o caminho está correto
 
 const MovementListScreen = ({ navigation }) => {
   const [movements, setMovements] = useState([]);
@@ -10,10 +11,11 @@ const MovementListScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchMovements = async () => {
       try {
-        const response = await axios.get('http://192.168.0.10:3000/movements'); // Ajuste o endpoint
+        const response = await axios.get('http://192.168.0.10:3000/movements');
         setMovements(response.data);
-      } catch (error) {
+      } catch (err) {
         setError('Erro ao carregar as movimentações.');
+        console.error(err); // Log do erro
       } finally {
         setLoading(false);
       }
@@ -25,21 +27,34 @@ const MovementListScreen = ({ navigation }) => {
   const renderMovement = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.label}>Origem:</Text>
-      <Text style={styles.value}>{item.origin || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.origem.nome || 'Não especificado'}</Text>
 
       <Text style={styles.label}>Destino:</Text>
-      <Text style={styles.value}>{item.destination || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.destino.nome || 'Não especificado'}</Text>
 
       <Text style={styles.label}>Produto:</Text>
-      <Text style={styles.value}>{item.product || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.produto.nome || 'Não especificado'}</Text>
 
       <Text style={styles.label}>Status:</Text>
       <Text style={styles.value}>{item.status || 'Não especificado'}</Text>
     </View>
   );
 
+  // Função para logout
+  const handleLogout = () => {
+    // Aqui você pode adicionar a lógica de logout, como limpar dados do usuário
+    // Por exemplo, se você estiver usando AsyncStorage para armazenar o token:
+    // AsyncStorage.removeItem('userToken');
+
+    // Navega diretamente para a tela de login
+    navigation.navigate('Login'); // Ajuste para o nome correto da sua tela de login
+  };
+
   return (
     <View style={styles.container}>
+      {/* Passando a função de logout para o Header */}
+      <Header userName="Usuário" onLogout={handleLogout} />
+
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => navigation.navigate('Movement')}
@@ -69,6 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f0f0',
     padding: 20,
+    paddingTop: 80, // Ajuste se o header não estiver visível
   },
   addButton: {
     backgroundColor: '#00796b',

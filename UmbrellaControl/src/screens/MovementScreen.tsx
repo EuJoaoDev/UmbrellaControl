@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import axios from "axios"
 type Branch = {
   id: string;
   name: string;
@@ -67,6 +67,9 @@ const MovementScreen = () => {
 
   const handleRegister = async () => {
     // Validações
+
+    console.log(!selectedProduct)
+
     if (!originBranch || !destinationBranch || !selectedProduct) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
       return;
@@ -82,6 +85,13 @@ const MovementScreen = () => {
       return;
     }
 
+    console.log( 'branchID ' + originBranch ) 
+    console.log( 'destinID ' + destinationBranch ) 
+    console.log( 'productID ' + selectedProduct)
+    console.log( 'quantity ' + quantity)
+    console.log( 'Obs '      + observations)
+
+
     const movementData = {
       originBranchId: originBranch,  
       destinationBranchId: destinationBranch,
@@ -90,6 +100,12 @@ const MovementScreen = () => {
       observations,
     };
 
+
+    axios.post('http://192.168.0.10:3000/movements', movementData)
+    .then( console.log('dados salvos') )
+    .catch( console.error )
+
+    
     try {
       const response = await fetch('http://192.168.0.10:3000/movements', {
         method: 'POST',
@@ -151,16 +167,25 @@ const MovementScreen = () => {
       <Picker
         selectedValue={selectedProduct}
         onValueChange={(itemValue) => {
+
+          // console.log( itemValue )
+          
           setSelectedProduct(itemValue);
-          const product = products.find((p) => p.id === itemValue);
-          setAvailableQuantity(product ? product.availableQuantity : 0);
+          const product = products.find((p) => p.product_id === itemValue );
+
+          //console.log( product ) 
+
+          setAvailableQuantity(product ? product.quantity : 0);
         }}
         style={styles.picker}
       >
         <Picker.Item label="Selecione um produto" value={null} />
-        {products.map((product) => (
-          <Picker.Item key={product.id} label={product.product_name} value={product.id} />
-        ))}
+        {products.map((product) => {
+
+          console.log( product )
+
+          return <Picker.Item key={product.product_id} label={product.product_name} value={product.product_id} />
+        })}
       </Picker>
 
       {/* TextInput para informar a quantidade */}
@@ -183,7 +208,7 @@ const MovementScreen = () => {
 
       {/* Botão para cadastrar */}
       <View style={styles.buttonContainer}>
-        <Button title="Cadastrar" onPress={handleRegister} color="#5a8d8d" />
+        <Button title="Cadastrar" onPress={handleRegister} color="#00796b" />
       </View>
     </View>
   );
