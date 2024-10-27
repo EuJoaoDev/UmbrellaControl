@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios'; 
+import { TextInputMask } from 'react-native-masked-text'; // Importando o TextInputMask
 
 const UserRegisterScreen = () => {
   const [profile, setProfile] = useState('motorista'); // Estado para controlar o tipo de perfil
@@ -68,11 +69,13 @@ const UserRegisterScreen = () => {
         value={name}
         onChangeText={setName}
       />
-      <TextInput
-        style={styles.input}
-        placeholder={profile === 'motorista' ? 'CPF' : 'CNPJ'}
+      {/* Campo com máscara dinâmica */}
+      <TextInputMask
+        type={profile === 'motorista' ? 'cpf' : 'cnpj'} // CPF para motorista, CNPJ para filial
         value={document}
         onChangeText={setDocument}
+        style={styles.input}
+        placeholder={profile === 'motorista' ? 'CPF' : 'CNPJ'}
         keyboardType="numeric"
       />
       <TextInput
