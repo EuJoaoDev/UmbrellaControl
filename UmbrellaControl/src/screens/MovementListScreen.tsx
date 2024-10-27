@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import Header from './Header'; // Verifique se o caminho está correto
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MovementListScreen = ({ navigation }) => {
+const MovementListScreen = ({ navigation, route }) => {
   const [movements, setMovements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,39 +16,43 @@ const MovementListScreen = ({ navigation }) => {
         setMovements(response.data);
       } catch (err) {
         setError('Erro ao carregar as movimentações.');
-        console.error(err); // Log do erro
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchMovements();
-  }, []);
+
+    // Verifica se uma nova movimentação foi passada como parâmetro
+    if (route.params?.newMovement) {
+      setMovements((prevMovements) => [...prevMovements, route.params.newMovement]);
+    }
+  }, [route.params?.newMovement]); // Adiciona a nova movimentação como dependência
 
   const renderMovement = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.label}>Origem:</Text>
-      <Text style={styles.value}>{item.origem.nome || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.origem ? item.origem.nome : 'Não especificado'}</Text>
 
       <Text style={styles.label}>Destino:</Text>
-      <Text style={styles.value}>{item.destino.nome || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.destino ? item.destino.nome : 'Não especificado'}</Text>
 
       <Text style={styles.label}>Produto:</Text>
-      <Text style={styles.value}>{item.produto.nome || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.produto ? item.produto.nome : 'Não especificado'}</Text>
+
+      <Text style={styles.label}>Quantidade:</Text>
+      <Text style={styles.value}>{item.quantity}</Text>
 
       <Text style={styles.label}>Status:</Text>
-      <Text style={styles.value}>{item.status || 'Não especificado'}</Text>
+      <Text style={styles.value}>{item.status}</Text>
     </View>
   );
 
   // Função para logout
-  const handleLogout = () => {
-    // Aqui você pode adicionar a lógica de logout, como limpar dados do usuário
-    // Por exemplo, se você estiver usando AsyncStorage para armazenar o token:
-    // AsyncStorage.removeItem('userToken');
-
-    // Navega diretamente para a tela de login
-    navigation.navigate('Login'); // Ajuste para o nome correto da sua tela de login
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('user');
+    navigation.navigate('Login'); // Navega para a tela de login após o logout
   };
 
   return (
@@ -69,7 +74,7 @@ const MovementListScreen = ({ navigation }) => {
       ) : (
         <FlatList
           data={movements}
-          keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()} // Use id ou um valor aleatório como chave
+          keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
           renderItem={renderMovement}
           contentContainerStyle={styles.list}
           ListEmptyComponent={<Text style={styles.emptyMessage}>Nenhuma movimentação encontrada.</Text>}

@@ -4,22 +4,23 @@ import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import axios from "axios"
+
 type Branch = {
   id: string;
   name: string;
 };
 
 type Product = {
-  id: string;
-  name: string;
-  availableQuantity: number; 
+  product_id: string;
+  product_name: string;
+  quantity: number;
 };
 
 type RootStackParamList = {
-  Home: undefined;
+  MovementListScreen: undefined;  // Adicionei esta tela para redirecionamento
 };
 
-type MovementScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type MovementScreenProp = StackNavigationProp<RootStackParamList, 'MovementListScreen'>;
 
 const MovementScreen = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -66,10 +67,6 @@ const MovementScreen = () => {
   }, []);
 
   const handleRegister = async () => {
-    // Validações
-
-    console.log(!selectedProduct)
-
     if (!originBranch || !destinationBranch || !selectedProduct) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
       return;
@@ -85,27 +82,14 @@ const MovementScreen = () => {
       return;
     }
 
-    console.log( 'branchID ' + originBranch ) 
-    console.log( 'destinID ' + destinationBranch ) 
-    console.log( 'productID ' + selectedProduct)
-    console.log( 'quantity ' + quantity)
-    console.log( 'Obs '      + observations)
-
-
     const movementData = {
-      originBranchId: originBranch,  
+      originBranchId: originBranch,
       destinationBranchId: destinationBranch,
       productId: selectedProduct,
       quantity,
       observations,
     };
-
-
-    axios.post('http://192.168.0.10:3000/movements', movementData)
-    .then( console.log('dados salvos') )
-    .catch( console.error )
-
-    
+  
     try {
       const response = await fetch('http://192.168.0.10:3000/movements', {
         method: 'POST',
@@ -114,16 +98,19 @@ const MovementScreen = () => {
         },
         body: JSON.stringify(movementData),
       });
-
+  
       if (response.ok) {
+        const newMovement = await response.json(); // Obter a nova movimentação criada do servidor
+  
         Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso!');
-        // Limpar campos após sucesso
         setOriginBranch(null);
         setDestinationBranch(null);
         setSelectedProduct(null);
         setQuantity(null);
         setObservations('');
-        navigation.navigate('Home');
+  
+        // Navegar para a tela de listagem de movimentações com a nova movimentação
+        navigation.navigate('MovementList', { newMovement });
       } else {
         const errorData = await response.json();
         Alert.alert('Erro', errorData.message || 'Falha ao cadastrar a movimentação.');
@@ -136,7 +123,6 @@ const MovementScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Picker para selecionar a filial de origem */}
       <Text style={styles.label}>Filial de Origem:</Text>
       <Picker
         selectedValue={originBranch}
@@ -149,7 +135,6 @@ const MovementScreen = () => {
         ))}
       </Picker>
 
-      {/* Picker para selecionar a filial de destino */}
       <Text style={styles.label}>Filial de Destino:</Text>
       <Picker
         selectedValue={destinationBranch}
@@ -162,33 +147,22 @@ const MovementScreen = () => {
         ))}
       </Picker>
 
-      {/* Picker para selecionar o produto */}
       <Text style={styles.label}>Produto:</Text>
       <Picker
         selectedValue={selectedProduct}
         onValueChange={(itemValue) => {
-
-          // console.log( itemValue )
-          
           setSelectedProduct(itemValue);
-          const product = products.find((p) => p.product_id === itemValue );
-
-          //console.log( product ) 
-
+          const product = products.find((p) => p.product_id === itemValue);
           setAvailableQuantity(product ? product.quantity : 0);
         }}
         style={styles.picker}
       >
         <Picker.Item label="Selecione um produto" value={null} />
-        {products.map((product) => {
-
-          console.log( product )
-
-          return <Picker.Item key={product.product_id} label={product.product_name} value={product.product_id} />
-        })}
+        {products.map((product) => (
+          <Picker.Item key={product.product_id} label={product.product_name} value={product.product_id} />
+        ))}
       </Picker>
 
-      {/* TextInput para informar a quantidade */}
       <Text style={styles.label}>Quantidade:</Text>
       <TextInput
         value={quantity !== null ? String(quantity) : ''}
@@ -197,7 +171,6 @@ const MovementScreen = () => {
         style={styles.input}
       />
 
-      {/* TextInput multiline para adicionar observações */}
       <Text style={styles.label}>Observações:</Text>
       <TextInput
         value={observations}
@@ -206,7 +179,6 @@ const MovementScreen = () => {
         style={[styles.input, styles.textArea]}
       />
 
-      {/* Botão para cadastrar */}
       <View style={styles.buttonContainer}>
         <Button title="Cadastrar" onPress={handleRegister} color="#00796b" />
       </View>
