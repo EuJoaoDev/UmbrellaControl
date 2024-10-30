@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import Header from './Header'; // Verifique se o caminho está correto
+import Header from './Header'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MovementListScreen = ({ navigation, route }) => {
@@ -41,8 +41,7 @@ const MovementListScreen = ({ navigation, route }) => {
       <Text style={styles.label}>Produto:</Text>
       <Text style={styles.value}>{item.produto ? item.produto.nome : 'Não especificado'}</Text>
 
-      <Text style={styles.label}>Quantidade:</Text>
-      <Text style={styles.value}>{item.quantity}</Text>
+    
 
       <Text style={styles.label}>Status:</Text>
       <Text style={styles.value}>{item.status}</Text>

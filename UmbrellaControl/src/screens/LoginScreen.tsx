@@ -5,12 +5,13 @@ import { Button } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios'; // Importação do axios
 
 type RootStackParamList = {
   Home: undefined;
   Login: undefined;
+  MovementList: undefined; // Adicionei esta linha
+  DriverMovementList: undefined; // Adicionei esta linha
 };
 
 type LoginScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
@@ -24,27 +25,27 @@ const LoginScreen = () => {
     const checkUserLoggedIn = async () => {
       const user = await AsyncStorage.getItem('user');
 
-        if (user) {
-            const userProfile = user.profile
+      if (user) {
+        const userProfile = JSON.parse(user).profile; // 
 
-            let route = ''
-    
-            if( userProfile == 'admin'){
-                route = 'Home'
-            } else if (userProfile == 'filial'){
-                route = 'MovementList' // bote o nome da tela aqui
-            } else {
-                route = 'ProductList' // bote o nome da tela aqui
-            }
-    
-            navigation.reset({
-              index: 0,
-              routes: [{ name: route }],
-            });
+        let route = '';
+
+        if (userProfile === 'admin') {
+          route = 'Home';
+        } else if (userProfile === 'filial') {
+          route = 'MovementList'; // Nome da tela para filial
+        } else if (userProfile === 'motorista') { // Adicionei esta verificação
+          route = 'DriverMovementList'; // Nome da tela para motorista
+        }
+
+        navigation.reset({
+          index: 0,
+          routes: [{ name: route }],
+        });
       }
     };
     checkUserLoggedIn();
-  }, []);
+  }, [navigation]);
 
   const handleLogin = async () => {
     if (email === '' || password === '') {
@@ -63,16 +64,16 @@ const LoginScreen = () => {
       if (response.status === 200) {
         await AsyncStorage.setItem('user', JSON.stringify(data));
 
-        const userProfile = data.profile
+        const userProfile = data.profile;
 
-        let route = ''
+        let route = '';
 
-        if( userProfile == 'admin'){
-            route = 'Home'
-        } else if (userProfile == 'filial'){
-            route = 'MovementList' // bote o nome da tela aqui
+        if (userProfile === 'admin') {
+          route = 'Home';
+        } else if (userProfile === 'filial') {
+          route = 'MovementList'; 
         } else {
-            route = 'ProductList' // bote o nome da tela aqui
+          route = 'DriverMovementList'; 
         }
 
         navigation.reset({
