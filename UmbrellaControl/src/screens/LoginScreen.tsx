@@ -10,8 +10,8 @@ import axios from 'axios'; // Importação do axios
 type RootStackParamList = {
   Home: undefined;
   Login: undefined;
-  MovementList: undefined; // Adicionei esta linha
-  DriverMovementList: undefined; // Adicionei esta linha
+  MovementList: undefined; 
+  DriverMovementList: undefined; 
 };
 
 type LoginScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
@@ -26,16 +26,16 @@ const LoginScreen = () => {
       const user = await AsyncStorage.getItem('user');
 
       if (user) {
-        const userProfile = JSON.parse(user).profile; // 
+        const userProfile = JSON.parse(user).profile; 
 
         let route = '';
 
         if (userProfile === 'admin') {
           route = 'Home';
         } else if (userProfile === 'filial') {
-          route = 'MovementList'; // Nome da tela para filial
-        } else if (userProfile === 'motorista') { // Adicionei esta verificação
-          route = 'DriverMovementList'; // Nome da tela para motorista
+          route = 'MovementList'; 
+        } else if (userProfile === 'motorista') { 
+          route = 'DriverMovementList'; 
         }
 
         navigation.reset({
@@ -59,7 +59,7 @@ const LoginScreen = () => {
         password,
       });
 
-      const data = response.data; // Captura a resposta dos dados
+      const data = response.data; 
 
       if (response.status === 200) {
         await AsyncStorage.setItem('user', JSON.stringify(data));

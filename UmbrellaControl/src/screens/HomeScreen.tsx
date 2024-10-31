@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F5F5',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 80, // Adicionei um paddingTop para acomodar o Header
+    paddingTop: 80,
   },
   buttonsContainer: {
     marginTop: 40,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   icon: {
-    marginRight: 10, // Espaçamento entre ícone e texto
+    marginRight: 10,
   },
   buttonText: {
     color: '#fff',

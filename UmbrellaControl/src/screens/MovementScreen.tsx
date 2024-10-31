@@ -17,7 +17,7 @@ type Product = {
 };
 
 type RootStackParamList = {
-  MovementListScreen: undefined;  // Adicionei esta tela para redirecionamento
+  MovementListScreen: undefined;  
 };
 
 type MovementScreenProp = StackNavigationProp<RootStackParamList, 'MovementListScreen'>;
@@ -100,7 +100,7 @@ const MovementScreen = () => {
       });
   
       if (response.ok) {
-        const newMovement = await response.json(); // Obter a nova movimentação criada do servidor
+        const newMovement = await response.json(); 
   
         Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso!');
         setOriginBranch(null);
