@@ -16,7 +16,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MovementList">
+      <Stack.Navigator initialRouteName="ProductList">
         {/* Tela de Login */}
         <Stack.Screen
           name="Login"

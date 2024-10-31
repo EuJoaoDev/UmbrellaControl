@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Alert,
+} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
@@ -16,20 +24,25 @@ type Movement = {
   quantidade: number;
   origem: { nome: string };
   destino: { nome: string };
-  status: 'created' | 'Em Trânsito' | 'Coleta Finalizada';
+  status: 'created' | 'em transito' | 'coleta finalizada';
 };
 
 type RootStackParamList = {
   Login: undefined;
 };
 
-type DriverMovementListScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
+type DriverMovementListScreenProp = StackNavigationProp<
+  RootStackParamList,
+  'Login'
+>;
 
 const DriverMovementListScreen: React.FC = () => {
   const [movements, setMovements] = useState<Movement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<{ name: string; profile: string } | null>(null);
+  const [user, setUser] = useState<{ name: string; profile: string } | null>(
+    null
+  );
   const navigation = useNavigation<DriverMovementListScreenProp>();
 
   useEffect(() => {
@@ -51,7 +64,7 @@ const DriverMovementListScreen: React.FC = () => {
       console.log('Movimentações recebidas:', response.data);
       setMovements(response.data);
     } catch (err) {
-      console.error('Erro ao buscar movimentações:', err); // Loga o erro para debugging
+      console.error('Erro ao buscar movimentações:', err);
       setError('Erro ao carregar as movimentações.');
     } finally {
       setLoading(false);
@@ -74,30 +87,36 @@ const DriverMovementListScreen: React.FC = () => {
     }
 
     const result = await ImagePicker.launchCameraAsync();
-    return !result.cancelled ? result : null;
+    return !result.canceled ? result.assets[0] : null;
   };
 
   const handleDeliveryAction = async (id: string, action: 'start' | 'end') => {
     const photo = await capturePhoto();
-    if (!photo) return; // Retorna se a captura da foto falhar
+    if (!photo) return;
 
     const formData = new FormData();
     formData.append('file', {
       uri: photo.uri,
-      type: photo.type,
+      type: photo.mimeType,
       name: `${action}-${Date.now()}`,
     });
-    formData.append('motorista', user?.name || 'Motorista Desconhecido'); // Usa o nome do motorista armazenado
+    formData.append('motorista', user?.name || 'Motorista Desconhecido');
 
     try {
       await axios.put(`http://192.168.0.10:3000/movements/${id}/${action}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      Alert.alert('Sucesso', `${action === 'start' ? 'Entrega iniciada!' : 'Entrega finalizada!'}`);
-      fetchMovements(); // Tente recarregar as movimentações
+      Alert.alert(
+        'Sucesso',
+        ` ${action === 'start' ? 'Entrega iniciada!' : 'Entrega finalizada!'}`
+      );
+      fetchMovements();
     } catch (error) {
-      console.error('Erro na entrega:', error); // Loga o erro para debugging
-      Alert.alert('Erro', `Falha ao ${action === 'start' ? 'iniciar' : 'finalizar'} a entrega.`);
+      console.error('Erro na entrega:', error);
+      Alert.alert(
+        'Erro',
+        ` Falha ao ${action === 'start' ? 'iniciar' : 'finalizar'} a entrega.`
+      );
     }
   };
 
@@ -105,9 +124,9 @@ const DriverMovementListScreen: React.FC = () => {
     switch (status) {
       case 'created':
         return styles.createdCard;
-      case 'Em Trânsito':
+      case 'em transito':
         return styles.emTrânsitoCard;
-      case 'Coleta Finalizada':
+      case 'coleta finalizada':
         return styles.coletaFinalizadaCard;
       default:
         return {};
@@ -116,22 +135,43 @@ const DriverMovementListScreen: React.FC = () => {
 
   const renderMovement = ({ item }: { item: Movement }) => (
     <View style={[styles.card, getStatusStyle(item.status)]}>
-      <Image source={{ uri: item.produto.imagem }} style={styles.productImage} />
-      <Text style={styles.label}>ID: <Text style={styles.value}>{item.id}</Text></Text>
-      <Text style={styles.label}>Produto: <Text style={styles.value}>{item.produto.nome}</Text></Text>
-      <Text style={styles.label}>Quantidade: <Text style={styles.value}>{item.quantidade}</Text></Text>
-      <Text style={styles.label}>Origem: <Text style={styles.value}>{item.origem.nome}</Text></Text>
-      <Text style={styles.label}>Destino: <Text style={styles.value}>{item.destino.nome}</Text></Text>
-      <Text style={styles.label}>Status: <Text style={styles.value}>{item.status}</Text></Text>
+      <Image
+        source={{ uri: item.produto.imagem }}
+        style={styles.productImage}
+      />
+      <Text style={styles.label}>
+        ID: <Text style={styles.value}>{item.id}</Text>
+      </Text>
+      <Text style={styles.label}>
+        Produto: <Text style={styles.value}>{item.produto.nome}</Text>
+      </Text>
+      <Text style={styles.label}>
+        Quantidade: <Text style={styles.value}>{item.quantidade}</Text>
+      </Text>
+      <Text style={styles.label}>
+        Origem: <Text style={styles.value}>{item.origem.nome}</Text>
+      </Text>
+      <Text style={styles.label}>
+        Destino: <Text style={styles.value}>{item.destino.nome}</Text>
+      </Text>
+      <Text style={styles.label}>
+        Status: <Text style={styles.value}>{item.status}</Text>
+      </Text>
 
       {item.status === 'created' && (
-        <TouchableOpacity style={styles.actionButton} onPress={() => handleDeliveryAction(item.id, 'start')}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => handleDeliveryAction(item.id, 'start')}
+        >
           <Text style={styles.buttonText}>Iniciar Entrega</Text>
         </TouchableOpacity>
       )}
 
-      {item.status === 'Em Trânsito' && (
-        <TouchableOpacity style={styles.actionButton} onPress={() => handleDeliveryAction(item.id, 'end')}>
+      {item.status === 'em transito' && (
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => handleDeliveryAction(item.id, 'end')}
+        >
           <Text style={styles.buttonText}>Finalizar Entrega</Text>
         </TouchableOpacity>
       )}
@@ -149,10 +189,14 @@ const DriverMovementListScreen: React.FC = () => {
       ) : (
         <FlatList
           data={movements}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={renderMovement}
           contentContainerStyle={styles.list}
-          ListEmptyComponent={<Text style={styles.emptyMessage}>Nenhuma movimentação encontrada.</Text>}
+          ListEmptyComponent={
+            <Text style={styles.emptyMessage}>
+              Nenhuma movimentação encontrada.
+            </Text>
+          }
         />
       )}
     </View>
@@ -181,7 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffa07a',
   },
   coletaFinalizadaCard: {
-    backgroundColor: '#a5d6a7', // Aqui você pode alterar a cor conforme a necessidade
+    backgroundColor: '#a5d6a7',
   },
   productImage: {
     width: 100,
