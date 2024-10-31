@@ -42,28 +42,20 @@ O **Guarda-Chuva Farmácias** é um app de uso interno desenvolvido para simplif
 **Abaixo você pode ver algumas das telas do projeto:**
 
 <p align="center">
-  <img src="![Login](https://github.com/user-attachments/assets/cdb710c9-e302-4860-850c-08a6deb3949d)
-" alt="Login" width="30%" style="margin-right: 10px;"/>
-  <img src="![Home admin](https://github.com/user-attachments/assets/90337322-c8fa-4bf3-9416-5535da69cdf1)
-" alt="Home admin" width="30%" style="margin-right: 10px;"/>
-  <img src="![listagem produtos](https://github.com/user-attachments/assets/1f7b42ad-f4e6-4f2e-aab4-985ea7f2d8e9)
-" alt="Listagem de produtos" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/cdb710c9-e302-4860-850c-08a6deb3949d" alt="Login" width="30%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/90337322-c8fa-4bf3-9416-5535da69cdf1" alt="Home admin" width="30%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/1f7b42ad-f4e6-4f2e-aab4-985ea7f2d8e9" alt="Listagem de produtos" width="30%"/>
 </p>
 
 <p align="center">
-  <img src="![gerenciamento de usuários](https://github.com/user-attachments/assets/0de92ecb-60ae-4b27-a2ce-c7154e633fd8)
-" alt="Gerenciamento de usuários" width="30%" style="margin-right: 10px;"/>
-  <img src="![Cadastro filial e motorista](https://github.com/user-attachments/assets/8b7d6c32-8d1b-4ab9-a38f-7af2aa86f33b)
-" alt="Cadastro filial e motorista" width="30%" style="margin-right: 10px;"/>
-  <img src="![home filial](https://github.com/user-attachments/assets/e8ae874b-0896-4bd2-bc16-bb484caf7a0f)
-" alt="Home Filial" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/0de92ecb-60ae-4b27-a2ce-c7154e633fd8" alt="Gerenciamento de usuários" width="30%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/8b7d6c32-8d1b-4ab9-a38f-7af2aa86f33b" alt="Cadastro filial e motorista" width="30%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/e8ae874b-0896-4bd2-bc16-bb484caf7a0f" alt="Home Filial" width="30%"/>
 </p>
 
 <p align="center">
-  <img src="![Cadastro movimentações](https://github.com/user-attachments/assets/a9883aa6-ee12-4290-aeed-d614cc5b5d16)
-" alt="Cadastro de movimentações" width="45%" style="margin-right: 10px;"/>
-  <img src="![Home Motorista](https://github.com/user-attachments/assets/57c2a05d-f35b-4781-8c93-b0f9b1690df4)
-" alt="Home Motorista" width="45%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/a9883aa6-ee12-4290-aeed-d614cc5b5d16" alt="Cadastro de movimentações" width="45%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/57c2a05d-f35b-4781-8c93-b0f9b1690df4" alt="Home Motorista" width="45%" style="margin-right: 10px;"/>
 </p>
 
 ---
