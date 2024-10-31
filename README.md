@@ -54,8 +54,8 @@ O **Guarda-Chuva Farmácias** é um app de uso interno desenvolvido para simplif
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a9883aa6-ee12-4290-aeed-d614cc5b5d16" alt="Cadastro de movimentações" width="45%" style="margin-right: 10px;"/>
-  <img src="https://github.com/user-attachments/assets/57c2a05d-f35b-4781-8c93-b0f9b1690df4" alt="Home Motorista" width="45%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/a9883aa6-ee12-4290-aeed-d614cc5b5d16" alt="Cadastro de movimentações" width="30%" style="margin-right: 10px;"/>
+  <img src="https://github.com/user-attachments/assets/57c2a05d-f35b-4781-8c93-b0f9b1690df4" alt="Home Motorista" width="30%" style="margin-right: 10px;"/>
 </p>
 
 ---
