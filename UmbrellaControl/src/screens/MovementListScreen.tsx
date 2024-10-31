@@ -28,7 +28,7 @@ const MovementListScreen = ({ navigation, route }) => {
     if (route.params?.newMovement) {
       setMovements((prevMovements) => [...prevMovements, route.params.newMovement]);
     }
-  }, [route.params?.newMovement]); // Adiciona a nova movimentação como dependência
+  }, [route.params?.newMovement]); 
 
   const renderMovement = ({ item }) => (
     <View style={styles.card}>
@@ -51,7 +51,7 @@ const MovementListScreen = ({ navigation, route }) => {
   // Função para logout
   const handleLogout = async () => {
     await AsyncStorage.removeItem('user');
-    navigation.navigate('Login'); // Navega para a tela de login após o logout
+    navigation.navigate('Login'); 
   };
 
   return (
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f0f0',
     padding: 20,
-    paddingTop: 80, // Ajuste se o header não estiver visível
+    paddingTop: 80, 
   },
   addButton: {
     backgroundColor: '#00796b',

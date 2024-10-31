@@ -29,7 +29,7 @@ const UserRegisterScreen = () => {
       profile,
       name,
       document,
-      full_address: address, // Corrigido para "full_address"
+      full_address: address, 
       email,
       password,
     };
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   selected: {
-    backgroundColor: '#2C8C8C', // Cor similar à tela de login/home
+    backgroundColor: '#2C8C8C', 
     borderColor: '#2C8C8C',
   },
   input: {
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#2C8C8C', // Cor do botão
+    backgroundColor: '#2C8C8C', 
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f0f0',
     padding: 20,
-    paddingTop: 90, // Ajuste para o espaço do Header
+    paddingTop: 90, 
   },
   searchInput: {
     height: 50,
