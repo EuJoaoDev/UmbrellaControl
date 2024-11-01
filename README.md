@@ -89,5 +89,7 @@ O **Guarda-Chuva Farmácias** é um app de uso interno desenvolvido para simplif
 - Feedback visual em tempo real no cadastro de usuários e produtos.
 - Melhorias na tela de pesquisa de produtos com sugestões automáticas e filtros adicionais.
 
+## 📸 Vídeo explicativo
 
+[Assista à demonstração do projeto](https://drive.google.com/file/d/11Uw5X_7zt2fn7ePogjr35BZA9JOkqHZa/view?usp=sharing)
 
